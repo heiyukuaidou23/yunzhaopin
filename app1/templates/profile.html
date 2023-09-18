@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        h2 {
+            color: #007bff;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<!-- 导航栏 -->
+{#<nav class="navbar navbar-expand-lg navbar-dark bg-primary">#}
+{#    <div class="container">#}
+{#        <a class="navbar-brand" href="#">云招聘</a>#}
+{#        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"#}
+{#                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">#}
+{#            <span class="navbar-toggler-icon"></span>#}
+{#        </button>#}
+{#        <div class="collapse navbar-collapse" id="navbarNav">#}
+{#            <ul class="navbar-nav ml-auto">#}
+{#                <li class="nav-item">#}
+{#                    <button class="btn btn-primary" onclick="goBack()">返回</button>#}
+{#                </li>#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link" href="{% url 'home' %}">首页</a>#}
+{#                </li>#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link" href="#">公司</a>#}
+{#                </li>#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link" href="#">关于我们</a>#}
+{#                </li>#}
+{#                <li class="nav-item">#}
+{#                    <a class="nav-link" href="#">联系我们</a>#}
+{#                </li>#}
+{#            </ul>#}
+{#        </div>#}
+{#    </div>#}
+{#</nav>#}
+<h1>个人中心</h1>
+<div class="container">
+{#    {% for resume in resumes %}#}
+        <h2>个人简历</h2>
+        <!-- 显示用户已填写的简历信息 -->
+        <p>姓名: {{ resumes.name }}</p>
+        <p>年龄: {{ resumes.age }}</p>
+        <p>性别: {{ resumes.gender }}</p>
+        <p>联系方式: {{ resumes.contact }}</p>
+        <p>求职状态: {{ resumes.job_status }}</p>
+        <p>求职期望: {{ resumes.job_expectation }}</p>
+        <p>经历: {{ resumes.work_experience }}</p>
+        <p>项目经历: {{ resumes.project_experience }}</p>
+        <p>教育程度: {{ resumes.education }}</p>
+        <p>专业技能: {{ resumes.skills }}</p>
+{#    {% empty %}#}
+        <!-- 用户尚未创建简历的提示 -->
+{#        <p>您还没有创建个人简历，请<a href="{% url 'w_resume' %}">点击这里</a>创建。</p>#}
+{#    {% endfor %}#}
+</div>
+</body>
+</html>

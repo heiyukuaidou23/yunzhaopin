@@ -1,0 +1,51 @@
+/* 自定义表单样式 */
+
+/* 添加外边距和背景颜色 */
+.form-group {
+    margin-bottom: 40px;
+}
+
+/* 标签样式 */
+.form-group label {
+    font-weight: bold;
+}
+
+/* 输入框样式 */
+.form-control {
+    border-radius: 0;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+/* 聚焦状态下的输入框样式 */
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: none;
+}
+
+/* 按钮样式 */
+.btn-primary {
+    width: 100%;
+    border-radius: 30px;
+    background-color: #007bff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* 文本居中 */
+.text-center {
+    text-align: center;
+}
+
+/* 链接样式 */
+.text-center a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.text-center a:hover {
+    text-decoration: underline;
+}

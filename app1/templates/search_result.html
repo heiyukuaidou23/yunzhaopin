@@ -1,0 +1,108 @@
+{% extends 'layout.html' %}
+{%block content%}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云招聘系统 - 搜索结果</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f3f3f3;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+
+        .search-box {
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 改进按钮样式 */
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            font-weight: bold; /* 增加粗体 */
+            padding: 10px 20px; /* 增加内边距 */
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        /* 搜索结果样式 */
+        .search-results {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-item {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+
+        .result-title {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .result-description {
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 主要内容 -->
+<div class="container">
+    <h1>搜索结果</h1>
+
+    <!-- 添加搜索结果框 -->
+    <div class="search-results">
+        {% if query %}
+        <h3>搜索结果: "{{ query }}"</h3>
+        {% endif %}
+        {% for job in page %}
+        <div class="result-item">
+            <h3 class="result-title"><a href="{% url 'job_detail' job.pk %}">{{ job.workName }}</a></h3>
+            <p class="result-description">{{ job.companyName }}</p>
+            <!-- 添加其他职位信息字段 -->
+        </div>
+        {% endfor %}
+
+        <!-- 分页按钮 -->
+        <div class="text-center">
+            <ul class="pagination justify-content-center">
+                {% if page.has_previous %}
+                <li class="page-item"><a class="page-link" href="?q={{ query }}&page=1">&laquo; 第一页</a></li>
+                <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page.previous_page_number }}">上一页</a>
+                </li>
+                {% endif %}
+
+                <li class="page-item active"><span class="page-link">{{ page.number }}</span></li>
+
+                {% if page.has_next %}
+                <li class="page-item"><a class="page-link"
+                                         href="?q={{ query }}&page={{ page.next_page_number }}">下一页</a></li>
+                <li class="page-item"><a class="page-link" href="?q={{ query }}&page={{ page.paginator.num_pages }}">最后一页
+                    &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <!-- JavaScript库和代码 -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
+{% endblock %}
