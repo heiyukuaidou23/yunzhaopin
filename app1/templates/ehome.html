@@ -1,0 +1,180 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>云招聘系统 - 首页</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f3f3f3;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .job-listing {
+            padding: 20px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .job-listing:last-child {
+            border-bottom: none;
+        }
+
+        .job-title {
+            font-weight: bold;
+        }
+
+        .job-description {
+            margin-top: 10px;
+        }
+
+        .search-box {
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 改进按钮样式 */
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            color: #fff;
+            font-weight: bold; /* 增加粗体 */
+            padding: 10px 20px; /* 增加内边距 */
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        /* 左侧筛选器样式 */
+        .filter-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+
+        .filter-label {
+            font-weight: bold;
+        }
+
+        .filter-options select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+<!-- 导航栏 -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">云招聘</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'ehome' %}">
+                        <button class="btn btn-primary">首页</button>
+                    </a>
+                </li>
+                {% if show_login_register %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">
+                            <button class="btn btn-primary">我要找工作</button>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/elogin">
+                            <button class="btn btn-primary">我要招人</button>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/create_job">
+                            <button class="btn btn-primary">hr个人中心</button>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">
+                            <button class="btn btn-primary">退出</button>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- 右侧职位列表 -->
+<div class="col-md-9">
+    <h1>欢迎{{ request.session.info.name }}进入云招聘HR系统</h1>
+    <h4>希望您找到合适的员工</h4>
+    <!-- 添加搜索框 -->
+    <div class="search-box">
+        <h2>搜索招聘职位</h2>
+        <form action="/search/" method="GET">
+            <div class="form-row">
+                <div class="col-md-8">
+                    <input type="text" class="form-control" name="q" placeholder="搜索公司、职位"
+                           autocomplete='off'>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">搜索</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- 最新职位列表 -->
+    <div class="container">
+        <h1 class="mt-4">招聘职位列表</h1>
+        {% for job in jobs %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{% url 'job_detail' job.pk %}">{{ job.workName }}</a></h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ job.companyName }}</h6>
+                    <p class="card-text">工作城市: {{ job.workCity }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- 分页按钮 -->
+    <div class="text-center">
+        <ul class="pagination justify-content-center">
+            {% if jobs.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">&laquo; 第一页</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ jobs.previous_page_number }}">上一页</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active"><span class="page-link">{{ jobs.number }}</span></li>
+
+            {% if jobs.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ jobs.next_page_number }}">下一页</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ jobs.paginator.num_pages }}">最后一页
+                    &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+<script>
+    function setKeyword(keyword) {
+        document.getElementById('keyword').value = keyword;
+        document.forms[0].submit();
+    }
+</script>
+</body>
+</html>

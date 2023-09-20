@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- 页面头部内容 -->
+</head>
+<body>
+    <h1>发布职位</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">发布</button>
+    </form>
+</body>
+</html>
