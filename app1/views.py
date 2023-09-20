@@ -238,12 +238,13 @@ def apply_job(request, job_id):
 
         # 获取职位
         job = get_object_or_404(Job, pk=job_id)
+        employer = job.employer
 
         # 创建申请表单并验证
         form = ApplyJobForm(request.POST)
         if form.is_valid():
             # 创建申请记录并分配默认简历
-            application = Application(user=user, job=job, resume=default_resume)
+            application = Application(user=user, job=job, resume=default_resume,employer=employer)
             application.save()
             return redirect('home')  # 重定向到个人中心页面或其他适当的页面
     else:
@@ -269,13 +270,12 @@ def e_profile(request):
     if user_info is not None:
         try:
             user_id = user_info['id']
-            user = models.JobSeeker.objects.get(id=user_id)
+            user = models.Employer.objects.get(id=user_id)
             # 检查是否有关联的简历
             try:
-                jobs = Job.objects.get(user=user)
-                return render(request, 'profile.html', {'jobs': jobs})
+                jobs = Job.objects.filter(employer_id=user)
+                return render(request, 'eprofile.html', {'jobs': jobs})
             except ObjectDoesNotExist:
-                # 如果没有简历，重定向到创建简历的页面
                 return redirect('create_job')
         except models.JobSeeker.DoesNotExist:
             return render(request, 'eprofile.html', {'user_not_found': True})
@@ -301,3 +301,37 @@ def create_job(request):
 
     return render(request, 'create_job.html', {'form': form})
 
+
+# 编辑工作
+def edit_job(request, job_id):
+    job = get_object_or_404(Job, pk=job_id)
+
+    if request.method == 'POST':
+        form = JobForm(request.POST, instance=job)
+        if form.is_valid():
+            form.save()
+            return redirect('eprofile')  # 重定向到招聘者个人中心或其他适当的页面
+    else:
+        form = JobForm(instance=job)
+
+    return render(request, 'edit_job.html', {'form': form, 'job': job})
+
+# 查看收到的投递信息
+
+def eview_applications(request):
+    user_info = request.session.get('info')
+    if user_info is not None:
+        user_id = user_info['id']
+        applications = Application.objects.filter(employer_id=user_id)
+        return render(request, 'eview_applications.html', {'applications': applications})
+    else:
+        # 处理用户未登录的情况
+        return redirect('login')
+
+
+# 查看投递的简历
+def eview_resume(request,resume_id):
+    # 获取特定的简历对象，确保简历存在或处理不存在的情况
+    resume = get_object_or_404(Resume, id=resume_id)
+
+    return render(request, 'eview_resume.html', {'resume': resume})

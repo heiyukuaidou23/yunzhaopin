@@ -1,10 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        /* 添加自定义样式以提高页面美观性 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        ol {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f8f8;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-shadow: 0px 2px 2px #eee;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            transition: opacity 0.3s; /* 添加淡入淡出的过渡效果 */
+        }
+
+        /* 编辑按钮样式 */
+        .edit-btn {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .edit-btn a {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+    </style>
 </head>
 <body>
-dwf
+<h1>HR个人中心</h1>
+<div class="container">
+    <button class="btn btn-success" onclick="goBack()">返回</button>
+    <h1>已发布的职位</h1>
+    <ol>
+        {% for job in jobs %}
+            <li>
+                <h4>
+                    <a href="{% url 'job_detail' job.pk %}">{{ job.workName }} - {{ job.workCity }}
+                        - {{ job.salary }}</a>
+                    <span class="float-right"> <!-- 使用 "float-right" 类将按钮移到右侧 -->
+            <a href="{% url 'edit_job' job.pk %}" class="btn btn-warning">编辑</a>
+        </span>
+                </h4>
+            </li>
+        {% endfor %}
+        <div class="text-center">
+            <a href="{% url 'create_job' %}" class="btn btn-primary btn-lg">发布职位</a>
+        </div>
+        <div class="text-center"><p></p>
+            <a href="/eview_applications" class="btn btn-success btn-lg">已收到的投递</a>
+        </div>
+        {% if not jobs %}
+            <p style="text-align: center; font-weight: bold; font-size: 30px;">您暂未发布任何职位</p>
+            <div class="edit-btn">
+                <a href="{% url 'create_job' %}" class="btn btn-primary">立即发布</a>
+            </div>
+        {% endif %}
+    </ol>
+</div>
+
 </body>
+<footer class="footer">
+    <div class="copyright">
+        <p>Copyright &copy; 20大数据应用开发3班 209030460张滔</p>
+    </div>
+</footer>
+
+<!-- JavaScript 代码 -->
+<script>
+    // 获取页脚元素
+    var footer = document.querySelector('.footer');
+
+    // 监听窗口滚动事件
+    window.addEventListener('scroll', function () {
+        if (window.scrollY > 100) { // 当滚动超过一定距离时
+            footer.style.opacity = '0'; // 隐藏页脚
+        } else {
+            footer.style.opacity = '1'; // 显示页脚
+        }
+    });
+
+    function goBack() {
+        window.history.back();
+    }
+</script>
 </html>

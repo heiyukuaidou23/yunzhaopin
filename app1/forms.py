@@ -64,3 +64,14 @@ class JobForm(forms.ModelForm):
         model = Job
         # fields = '__all__'
         exclude = ['employer']
+    # 添加自定义的样式和布局
+    widgets = {
+        'companyName': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '公司名称'}),
+        'companySize': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '公司人数'}),
+        'education': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '教育程度'}),
+        'workName': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '工作名称'}),
+        # 'publishTime': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        'salary': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '薪资待遇'}),
+        'workCity': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '工作城市'}),
+        'workingExp': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '经验要求'}),
+    }

@@ -26,7 +26,7 @@ class Job(models.Model):
     workingExp = models.CharField(max_length=50, verbose_name='经验要求')  # 经验要求
     businessType = models.CharField(max_length=255, default='', verbose_name='职位描述')
     # employer = models.ForeignKey(Employer, on_delete=models.CASCADE, default=1)
-    employer = models.ForeignKey(Employer, on_delete=models.CASCADE, null=True)
+    employer = models.ForeignKey(Employer, on_delete=models.CASCADE)
 
 
 class Resume(models.Model):
@@ -73,6 +73,7 @@ class Application(models.Model):
     user = models.ForeignKey(JobSeeker, on_delete=models.CASCADE)
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
     resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
+    employer = models.ForeignKey(Employer, on_delete=models.CASCADE)
     date_applied = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
