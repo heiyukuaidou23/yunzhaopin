@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>职位详情</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+    {#    <link rel="stylesheet" href="style.css">#}
     <!-- 添加其他样式和样式表链接 -->
 </head>
 <body>
@@ -67,9 +67,10 @@
             <div class="card mt-4">
                 <div class="card-body">
                     <h3 class="card-title">公司信息</h3>
-                    <p class="card-text company-info">公司简介：ABC科技是一家领先的科技公司，专注于前端开发和创新。</p>
+                    <p class="card-text company-info">
+                        公司简介：{{ job.companyName }}是一家领先的科技公司，专注于前端开发和创新。</p>
                     <p class="card-text company-info">公司规模：{{ job.companySize }}</p>
-                    <p class="card-text company-info">公司行业：信息技术</p>
+                    <p class="card-text company-info">创建时间：{{ job.publishTime }}</p>
                 </div>
             </div>
 
@@ -86,13 +87,15 @@
             </div>
 
             <!-- 申请按钮 -->
-            <a href="#" class="btn btn-primary mt-4">立即申请</a>
+            <form method="post" action="{% url 'apply_job' job.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">申请职位</button>
+            </form>
         </div>
 
         <!-- 右侧公司信息 -->
         <div class="col-md-4">
             <div class="card">
-                <img src="/static/images/cat.png" alt="公司Logo" class="card-img-top">
                 <div class="card-body">
                     <h4 class="card-title company-name">{{ job.companyName }}</h4>
                     <p class="card-text company-industry">信息技术</p>
@@ -108,13 +111,13 @@
                     <h3 class="card-title">相关职位</h3>
                     <div class="related-jobs">
                         {% for related_job in related_jobs %}
-                        <div class="related-job">
-                            <h5 class="card-title related-job-title">
-                                <a href="{% url 'job_detail' related_job.pk %}">{{ related_job.workName }}</a>
-                            </h5>
-                            <p class="card-text related-job-info">公司：{{ related_job.companyName }}</p>
-                            <p class="card-text related-job-info">薪资：{{ related_job.salary }}</p>
-                        </div>
+                            <div class="related-job">
+                                <h5 class="card-title related-job-title">
+                                    <a href="{% url 'job_detail' related_job.pk %}">{{ related_job.workName }}</a>
+                                </h5>
+                                <p class="card-text related-job-info">公司：{{ related_job.companyName }}</p>
+                                <p class="card-text related-job-info">薪资：{{ related_job.salary }}</p>
+                            </div>
                         {% endfor %}
                     </div>
                 </div>

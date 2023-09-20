@@ -8,8 +8,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import F, Value
 # from django.db.models.functions import Random
 from . import models
-from .forms import RegistrationForm, LoginForm, ERegistrationForm, ELoginForm, JobFilterForm, ResumeForm
-from .models import Job, Resume
+from .forms import RegistrationForm, LoginForm, ERegistrationForm, ELoginForm, JobFilterForm, ResumeForm, ApplyJobForm
+from .models import Job, Resume, Application, JobSeeker
 
 
 # from .models import Farmer, FamilyMember, IncomeExpense, AssetLiability, BusinessInfo, LoanCredit
@@ -173,6 +173,8 @@ def profile(request):
             return render(request, 'profile.html', {'user_not_found': True})
     else:
         return render(request, 'profile.html', {'user_not_logged_in': True})
+
+
 # 填写简历
 def w_resume(request):
     if request.method == 'POST':
@@ -186,3 +188,57 @@ def w_resume(request):
         form = ResumeForm()
 
     return render(request, 'w_resume.html', {'form': form})
+
+
+# 编辑简历
+def edit_resume(request, resume_id):
+    resume = get_object_or_404(Resume, id=resume_id)
+
+    if request.method == 'POST':
+        form = ResumeForm(request.POST, instance=resume)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ResumeForm(instance=resume)
+
+    return render(request, 'edit_resume.html', {'form': form, 'resume': resume})
+
+
+# 简历投递
+def apply_job(request, job_id):
+    if request.method == 'POST':
+        # 获取当前用户的默认简历
+        user_info = request.session.get('info')
+        if user_info is not None:
+            user_id = user_info['id']
+            user = get_object_or_404(JobSeeker, id=user_id)
+            default_resume = user.resume  # 假设你在 JobSeeker 模型中有一个名为 resume 的 OneToOneField
+        else:
+            return redirect('login')  # 如果用户未登录，重定向到登录页面
+
+        # 获取职位
+        job = get_object_or_404(Job, pk=job_id)
+
+        # 创建申请表单并验证
+        form = ApplyJobForm(request.POST)
+        if form.is_valid():
+            # 创建申请记录并分配默认简历
+            application = Application(user=user, job=job, resume=default_resume)
+            application.save()
+            return redirect('home')  # 重定向到个人中心页面或其他适当的页面
+    else:
+        # 处理GET请求，显示职位详情页面
+        job = get_object_or_404(Job, pk=job_id)
+        form = ApplyJobForm()  # 创建申请表单实例
+
+    return render(request, 'job_detail.html', {'job': job, 'form': form})
+
+
+# 查看投递记录的视图
+def view_applications(request):
+    user_info = request.session.get('info')
+    user_id = user_info['id']
+    user = models.JobSeeker.objects.get(id=user_id)
+    applications = Application.objects.filter(user=user)
+    return render(request, 'applications.html', {'applications': applications})

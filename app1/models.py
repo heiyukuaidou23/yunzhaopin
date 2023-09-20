@@ -44,8 +44,8 @@ class Resume(models.Model):
     contact = models.CharField(max_length=20, verbose_name="联系方式")
     # 求职状态
     JOB_STATUS_CHOICES = [
-        ('actively_looking', '积极找工作'),
-        ('not_looking', '暂不找工作'),
+        ('积极找工作', '积极找工作'),
+        ('暂不找工作', '暂不找工作'),
     ]
     job_status = models.CharField(max_length=20, choices=JOB_STATUS_CHOICES, verbose_name="求职状态")
     # 求职期望
@@ -64,3 +64,13 @@ class Resume(models.Model):
     class Meta:
         verbose_name = "个人简历"
         verbose_name_plural = "个人简历"
+
+
+class Application(models.Model):
+    user = models.ForeignKey(JobSeeker, on_delete=models.CASCADE)
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)  # 假设你有一个名为Job的模型
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE)  # 假设你有一个名为Resume的模型
+    date_applied = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.job.workName}"

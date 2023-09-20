@@ -23,15 +23,18 @@ from app1 import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('register/', views.user_register, name='register'),
+    path('register/', views.user_register, name='register'), # 求职者
     path('login/', views.user_login, name='login'),
-    path('eregister/', views.e_register, name='eregister'),
+    path('eregister/', views.e_register, name='eregister'), # 招聘者
     path('elogin/', views.e_login, name='elogin'),
-    path('logout/', views.user_logout, name='logout'),
-    path('', views.home, name="home"),
-    path('job/<int:job_id>/', views.job_detail, name='job_detail'),
-    path('search/', views.job_search, name='job_search'),
+    path('logout/', views.user_logout, name='logout'), # 退出
+    path('', views.home, name="home"), # 主页
+    path('job/<int:job_id>/', views.job_detail, name='job_detail'), # 工作详情
+    path('search/', views.job_search, name='job_search'), # 主页搜索框
     # path('jobs/', views.job_list, name='job_list'),  # 职位列表URL
     path('profile/', views.profile, name='profile'),  # 个人中心页面
-    path('w_resume/', views.w_resume, name='w_resume'),  # 编辑简历页面
+    path('w_resume/', views.w_resume, name='w_resume'),  # 填写简历页面
+    path('edit_resume/<int:resume_id>/', views.edit_resume, name='edit_resume'),  # 编辑简历页面
+    path('apply_job/<int:job_id>/', views.apply_job, name='apply_job'),
+    path('view_applications/', views.view_applications, name='view_applications'),
 ]

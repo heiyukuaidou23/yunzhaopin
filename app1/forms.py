@@ -50,6 +50,10 @@ class ResumeForm(forms.ModelForm):
 
     class Meta:
         model = Resume
-        fields = '__all__'  # 或者指定您需要的字段
+        # fields = '__all__'
+        exclude = ['user']
 
     # 在这里可以添加自定义的表单字段或验证逻辑，根据实际需要
+
+class ApplyJobForm(forms.Form):
+    pass  # 这里可以添加表单字段，如果需要的话

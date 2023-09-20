@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>投递记录</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* 添加自定义样式以提高页面美观性 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        ol {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f8f8f8;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-shadow: 0px 2px 2px #eee;
+        }
+
+        .footer {
+            background-color: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /* 编辑按钮样式 */
+        .edit-btn {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .edit-btn a {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <button class="btn btn-success" onclick="goBack()">返回</button>
+    <h1>投递记录</h1>
+    <ol>
+        {% for application in applications %}
+            <li>
+                <h4>您于{{ application.date_applied|date:"Y-m-d H:i" }}投递了 {{ application.job.companyName }}
+                    的 {{ application.job.workName }} 职位
+                </h4>
+            </li>
+        {% endfor %}
+        {% if not applications %}
+            <p style="text-align: center; font-weight: bold; font-size: 30px;">您暂未投递任何简历</p>
+            <div class="edit-btn">
+                <a href="{% url 'home' %}" class="btn btn-primary">立即投递</a>
+            </div>
+        {% endif %}
+    </ol>
+</div>
+</body>
+<footer class="footer">
+    <div class="copyright">
+        <p>Copyright &copy; 20大数据应用开发3班 209030460张滔</p>
+    </div>
+</footer>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+</html>
