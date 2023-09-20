@@ -8,7 +8,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import F, Value
 # from django.db.models.functions import Random
 from . import models
-from .forms import RegistrationForm, LoginForm, ERegistrationForm, ELoginForm, JobFilterForm, ResumeForm, ApplyJobForm
+from .forms import RegistrationForm, LoginForm, ERegistrationForm, ELoginForm, JobFilterForm, ResumeForm, ApplyJobForm, \
+    JobForm
 from .models import Job, Resume, Application, JobSeeker
 
 
@@ -76,7 +77,7 @@ def e_login(request):
     request.session['info'] = {"id": user_object.id, 'name': user_object.username}
     # 设置一个时间为一周
     request.session.set_expiry(60 * 60 * 24 * 7)
-    return redirect('home')
+    return redirect('ehome')
 
 
 # 退出
@@ -101,6 +102,20 @@ def home(request):
         show_login_register = True
     return render(request, 'home.html', {'jobs': jobs, 'show_login_register': show_login_register})
 
+
+def e_home(request):
+    jobs = Job.objects.all()  # 获取所有职位数据
+    paginator = Paginator(jobs, 5)  # 每页显示5个职位
+    page_number = request.GET.get('page')  # 获取当前页数，默认为第1页
+    jobs = paginator.get_page(page_number)  # 获取当前页的职位数据
+    # 获取当前用户信息
+    if 'info' in request.session:
+        # 用户已登录，隐藏登录与注册按钮
+        show_login_register = False
+    else:
+        # 用户未登录，显示登录与注册按钮
+        show_login_register = True
+    return render(request, 'ehome.html', {'jobs': jobs, 'show_login_register': show_login_register})
 
 # 职位详情
 # def job_detail(request, job_id):
@@ -177,11 +192,15 @@ def profile(request):
 
 # 填写简历
 def w_resume(request):
+    user_info = request.session.get('info')
+    user_id = user_info['id']
+    user = models.JobSeeker.objects.get(id=user_id)
     if request.method == 'POST':
         form = ResumeForm(request.POST)
         if form.is_valid():
             # 保存或更新简历数据
             resume = form.save(commit=False)
+            resume.user = user
             resume.save()
             return redirect('profile')  # 重定向到个人中心页面或其他适当的页面
     else:
@@ -242,3 +261,43 @@ def view_applications(request):
     user = models.JobSeeker.objects.get(id=user_id)
     applications = Application.objects.filter(user=user)
     return render(request, 'applications.html', {'applications': applications})
+
+# hr个人中心
+def e_profile(request):
+    user_info = request.session.get('info')
+
+    if user_info is not None:
+        try:
+            user_id = user_info['id']
+            user = models.JobSeeker.objects.get(id=user_id)
+            # 检查是否有关联的简历
+            try:
+                jobs = Job.objects.get(user=user)
+                return render(request, 'profile.html', {'jobs': jobs})
+            except ObjectDoesNotExist:
+                # 如果没有简历，重定向到创建简历的页面
+                return redirect('create_job')
+        except models.JobSeeker.DoesNotExist:
+            return render(request, 'eprofile.html', {'user_not_found': True})
+    else:
+        return render(request, 'eprofile.html', {'user_not_logged_in': True})
+
+
+# hr发布工作
+def create_job(request):
+    user_info = request.session.get('info')
+    user_id = user_info['id']
+    user = models.Employer.objects.get(id=user_id)
+    if request.method == 'POST':
+        form = JobForm(request.POST)
+        if form.is_valid():
+            job = form.save(commit=False)
+            job.employer = user  # 将职位与当前登录的招聘者关联
+            job.save()
+            return redirect('ehome')  # 重定向到招聘者个人中心或其他适当的页面
+
+    else:
+        form = JobForm()
+
+    return render(request, 'create_job.html', {'form': form})
+

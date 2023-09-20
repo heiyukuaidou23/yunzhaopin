@@ -29,6 +29,7 @@ urlpatterns = [
     path('elogin/', views.e_login, name='elogin'),
     path('logout/', views.user_logout, name='logout'), # 退出
     path('', views.home, name="home"), # 主页
+    path('ehome/',views.e_home,name="ehome"),
     path('job/<int:job_id>/', views.job_detail, name='job_detail'), # 工作详情
     path('search/', views.job_search, name='job_search'), # 主页搜索框
     # path('jobs/', views.job_list, name='job_list'),  # 职位列表URL
@@ -37,4 +38,5 @@ urlpatterns = [
     path('edit_resume/<int:resume_id>/', views.edit_resume, name='edit_resume'),  # 编辑简历页面
     path('apply_job/<int:job_id>/', views.apply_job, name='apply_job'),
     path('view_applications/', views.view_applications, name='view_applications'),
+    path('create_job/', views.create_job, name='create_job'),
 ]

@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 
-from .models import JobSeeker, Employer, Resume
+from .models import JobSeeker, Employer, Resume ,Job
 
 
 class LoginForm(forms.Form):
@@ -57,3 +57,10 @@ class ResumeForm(forms.ModelForm):
 
 class ApplyJobForm(forms.Form):
     pass  # 这里可以添加表单字段，如果需要的话
+
+class JobForm(forms.ModelForm):
+
+    class Meta:
+        model = Job
+        # fields = '__all__'
+        exclude = ['employer']

@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.utils import timezone
 
 
 class JobSeeker(models.Model):
@@ -16,15 +16,17 @@ class Employer(models.Model):
 
 
 class Job(models.Model):
-    companyName = models.CharField(max_length=100) #公司名称
-    companySize = models.CharField(max_length=50) # 公司人数
-    education = models.CharField(max_length=20)   # 教育程度
-    workName = models.CharField(max_length=100)   # 工作名称
-    publishTime = models.DateField()              # 上传时间
-    salary = models.CharField(max_length=50)      # 薪资待遇
-    workCity = models.CharField(max_length=50)    # 工作城市
-    workingExp = models.CharField(max_length=50)  # 经验要求
-
+    companyName = models.CharField(max_length=100, verbose_name='公司名称')  # 公司名称
+    companySize = models.CharField(max_length=50, null=True, blank=True, verbose_name='公司人数')  # 公司人数
+    education = models.CharField(max_length=20, verbose_name='教育程度')  # 教育程度
+    workName = models.CharField(max_length=100, verbose_name='工作名称')  # 工作名称
+    # publishTime = models.DateField(null=True, blank=True)              # 上传时间
+    salary = models.CharField(max_length=50, verbose_name='薪资待遇')  # 薪资待遇
+    workCity = models.CharField(max_length=50, verbose_name='工作城市')  # 工作城市
+    workingExp = models.CharField(max_length=50, verbose_name='经验要求')  # 经验要求
+    businessType = models.CharField(max_length=255, default='', verbose_name='职位描述')
+    # employer = models.ForeignKey(Employer, on_delete=models.CASCADE, default=1)
+    employer = models.ForeignKey(Employer, on_delete=models.CASCADE, null=True)
 
 
 class Resume(models.Model):
@@ -58,6 +60,7 @@ class Resume(models.Model):
     education = models.CharField(max_length=100, verbose_name="教育程度")
     # 专业技能
     skills = models.TextField(verbose_name="专业技能")
+
     def __str__(self):
         return self.user.username
 
@@ -68,8 +71,8 @@ class Resume(models.Model):
 
 class Application(models.Model):
     user = models.ForeignKey(JobSeeker, on_delete=models.CASCADE)
-    job = models.ForeignKey(Job, on_delete=models.CASCADE)  # 假设你有一个名为Job的模型
-    resume = models.ForeignKey(Resume, on_delete=models.CASCADE)  # 假设你有一个名为Resume的模型
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    resume = models.ForeignKey(Resume, on_delete=models.CASCADE)
     date_applied = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
