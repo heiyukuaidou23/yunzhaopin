@@ -138,7 +138,7 @@ SIMPLEUI_HOME_INFO = False
 SIMPLEUI_ANALYSIS = False
 
 # 隐藏快速操作
-# SIMPLEUI_HOME_QUICK = False
+SIMPLEUI_HOME_QUICK = False
 # 隐藏最近动作
 SIMPLEUI_HOME_ACTION = False
 
@@ -165,7 +165,7 @@ SIMPLEUI_CONFIG = {
             'icon': 'fas fa-user-shield',
             'models': [
                 {
-                    'name': '用户列表',
+                    'name': '管理员',
                     'icon': 'fa fa-user',
                     'url': 'auth/user/'
                 },
@@ -196,7 +196,7 @@ SIMPLEUI_CONFIG = {
                 {
                     'name': '求职者信息',
                     # 注意url按'/admin/应用名小写/模型名小写/'命名。
-                    'url': '/admin/app1/job_seeker/',
+                    'url': '/admin/app1/jobseeker/',
                     'icon': 'fa fa-tasks'
                 },
                 {
