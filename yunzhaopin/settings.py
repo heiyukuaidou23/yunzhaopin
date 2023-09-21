@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -27,10 +26,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
+    'simpleui',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -70,7 +69,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'yunzhaopin.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -108,30 +106,112 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-Hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-    # BASE_DIR / 'static',
-]
-
+STATIC_URL = '/static/'
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+#     BASE_DIR / 'static',
+# ]
+STATIC_ROOT = '/Users/PC/AppData/Local/Programs/Python/Python39/Lib/site-packages/django/contrib/admin/static'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SIMPLEUI_LOGO = 'https://avatars2.githubusercontent.com/u/13655483?s=60&v=4'
+# 隐藏右侧SimpleUI广告链接和使用分析
+SIMPLEUI_HOME_INFO = False
+SIMPLEUI_ANALYSIS = False
+
+# 隐藏快速操作
+# SIMPLEUI_HOME_QUICK = False
+# 隐藏最近动作
+SIMPLEUI_HOME_ACTION = False
+
+system_keep = False
+
+menu_display = True
+
+
+# 任务栏左侧菜单
+SIMPLEUI_CONFIG = {
+    # 是否使用系统默认菜单，自定义菜单时建议关闭。
+    'system_keep': False,
+
+    # 用于菜单排序和过滤, 不填此字段为默认排序和全部显示。空列表[] 为全部不显示.
+    'menu_display': ['任务管理', '权限认证'],
+
+    # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时刷新展示菜单内容。
+    # 一般建议关闭。
+    'dynamic': False,
+    'menus': [
+        {
+            'app': 'auth',
+            'name': '权限认证',
+            'icon': 'fas fa-user-shield',
+            'models': [
+                {
+                    'name': '用户列表',
+                    'icon': 'fa fa-user',
+                    'url': 'auth/user/'
+                },
+                {
+                    'name': '用户组',
+                    'icon': 'fa fa-th-list',
+                    'url': 'auth/group/'
+                }
+            ]
+        },
+
+        {
+            'name': '任务管理',
+            'icon': 'fa fa-th-list',
+            'models': [
+                {
+                    'name': '职位列表',
+                    # 注意url按'/admin/应用名小写/模型名小写/'命名。
+                    'url': '/admin/app1/job/',
+                    'icon': 'fa fa-tasks'
+                },
+                {
+                    'name': '简历信息',
+                    # 注意url按'/admin/应用名小写/模型名小写/'命名。
+                    'url': '/admin/app1/resume/',
+                    'icon': 'fa fa-tasks'
+                },
+                {
+                    'name': '求职者信息',
+                    # 注意url按'/admin/应用名小写/模型名小写/'命名。
+                    'url': '/admin/app1/job_seeker/',
+                    'icon': 'fa fa-tasks'
+                },
+                {
+                    'name': 'HR信息',
+                    # 注意url按'/admin/应用名小写/模型名小写/'命名。
+                    'url': '/admin/app1/employer/',
+                    'icon': 'fa fa-tasks'
+                },
+                # {
+                #     'name': '投递信息',
+                #     # 注意url按'/admin/应用名小写/模型名小写/'命名。
+                #     'url': '/admin/app1/application/',
+                #     'icon': 'fa fa-tasks'
+                # },
+            ]
+        },
+    ]
+}

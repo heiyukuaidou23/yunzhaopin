@@ -117,10 +117,6 @@ def e_home(request):
         show_login_register = True
     return render(request, 'ehome.html', {'jobs': jobs, 'show_login_register': show_login_register})
 
-# 职位详情
-# def job_detail(request, job_id):
-#     job = get_object_or_404(Job, pk=job_id)
-#     return render(request, 'job_detail.html', {'job': job})
 
 # 工作详情
 def job_detail(request, job_id):
@@ -152,22 +148,6 @@ def job_search(request):
     page = paginator.get_page(page_number)
     return render(request, 'search_result.html', {'page': page, 'query': query})
 
-
-# def job_list(request):
-#     jobs = Job.objects.all()  # 获取所有职位
-#
-#     # 处理筛选请求
-#     if request.method == 'GET':
-#         filter_form = JobFilterForm(request.GET)
-#         if filter_form.is_valid():
-#             category = filter_form.cleaned_data.get('category')
-#             keyword = filter_form.cleaned_data.get('keyword')  # 获取关键字
-#             if category:
-#                 jobs = jobs.filter(workName=category)  # 使用正确的字段名
-#             if keyword:
-#                 jobs = jobs.filter(workName__icontains=keyword)  # 使用正确的字段名
-#
-#     return render(request, 'home.html', {'jobs': jobs, 'filter_form': filter_form})
 
 # 个人中心
 def profile(request):

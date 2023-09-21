@@ -32,7 +32,6 @@ urlpatterns = [
     path('ehome/',views.e_home,name="ehome"),
     path('job/<int:job_id>/', views.job_detail, name='job_detail'), # 工作详情
     path('search/', views.job_search, name='job_search'), # 主页搜索框
-    # path('jobs/', views.job_list, name='job_list'),  # 职位列表URL
     path('profile/', views.profile, name='profile'),  # 个人中心页面
     path('w_resume/', views.w_resume, name='w_resume'),  # 填写简历页面
     path('edit_resume/<int:resume_id>/', views.edit_resume, name='edit_resume'),  # 编辑简历页面
@@ -40,7 +39,6 @@ urlpatterns = [
     path('eprofile/',views.e_profile,name='eprofile'),
     path('view_applications/', views.view_applications, name='view_applications'),
     path('create_job/', views.create_job, name='create_job'),
-    # 添加编辑工作的URL模式
     path('edit_job/<int:job_id>/', views.edit_job, name='edit_job'),
     path('eview_applications/', views.eview_applications, name='eview_applications'),
     path('eview_resume/<int:resume_id>/', views.eview_resume, name='eview_resume'),

@@ -4,16 +4,20 @@ from django.utils import timezone
 
 
 class JobSeeker(models.Model):
-    username = models.CharField(max_length=255)
-    password = models.CharField(max_length=255)
+    username = models.CharField(max_length=255,verbose_name='用户名')
+    password = models.CharField(max_length=255,verbose_name='密码')
     last_login = models.DateTimeField(verbose_name='Last Login', blank=True, null=True)
-
+    class Meta:
+        verbose_name = '求职者'
+        verbose_name_plural = verbose_name
 
 class Employer(models.Model):
     username = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
     last_login = models.DateTimeField(verbose_name='Last Login', blank=True, null=True)
-
+    class Meta:
+        verbose_name = '招聘者'
+        verbose_name_plural = verbose_name
 
 class Job(models.Model):
     companyName = models.CharField(max_length=100, verbose_name='公司名称')  # 公司名称
@@ -26,8 +30,11 @@ class Job(models.Model):
     workingExp = models.CharField(max_length=50, verbose_name='经验要求')  # 经验要求
     businessType = models.CharField(max_length=255, default='', verbose_name='职位描述')
     # employer = models.ForeignKey(Employer, on_delete=models.CASCADE, default=1)
-    employer = models.ForeignKey(Employer, on_delete=models.CASCADE)
+    employer = models.ForeignKey(Employer, on_delete=models.CASCADE,verbose_name='发布者')
 
+    class Meta:
+        verbose_name = '工作列表'
+        verbose_name_plural = verbose_name
 
 class Resume(models.Model):
     # 关联到用户
