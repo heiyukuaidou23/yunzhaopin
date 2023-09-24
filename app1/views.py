@@ -143,7 +143,7 @@ def job_search(request):
     # 查询匹配的职位数据
     results = Job.objects.filter(workName__icontains=query)
     # 分页逻辑
-    paginator = Paginator(results, 5)  # 每页显示10条数据
+    paginator = Paginator(results, 5)  # 每页显示5条数据
     # 获取当前页的数据
     page = paginator.get_page(page_number)
     return render(request, 'search_result.html', {'page': page, 'query': query})
@@ -235,7 +235,7 @@ def apply_job(request, job_id):
     return render(request, 'job_detail.html', {'job': job, 'form': form})
 
 
-# 查看投递记录的视图
+# 查看投递记录
 def view_applications(request):
     user_info = request.session.get('info')
     user_id = user_info['id']
@@ -246,7 +246,6 @@ def view_applications(request):
 # hr个人中心
 def e_profile(request):
     user_info = request.session.get('info')
-
     if user_info is not None:
         try:
             user_id = user_info['id']
@@ -254,6 +253,9 @@ def e_profile(request):
             # 检查是否有关联的简历
             try:
                 jobs = Job.objects.filter(employer_id=user)
+                paginator = Paginator(jobs, 10)  # 每页显示5个职位
+                page_number = request.GET.get('page')  # 获取当前页数，默认为第1页
+                jobs = paginator.get_page(page_number)  # 获取当前页的职位数据
                 return render(request, 'eprofile.html', {'jobs': jobs})
             except ObjectDoesNotExist:
                 return redirect('create_job')
@@ -297,7 +299,6 @@ def edit_job(request, job_id):
     return render(request, 'edit_job.html', {'form': form, 'job': job})
 
 # 查看收到的投递信息
-
 def eview_applications(request):
     user_info = request.session.get('info')
     if user_info is not None:

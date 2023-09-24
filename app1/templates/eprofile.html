@@ -100,14 +100,33 @@
             </div>
         {% endif %}
     </ol>
+    <div class="text-center">
+        <ul class="pagination justify-content-center">
+            {% if jobs.has_previous %}
+                <li class="page-item"><a class="page-link" href="?page=1">&laquo; 第一页</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ jobs.previous_page_number }}">上一页</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active"><span class="page-link">{{ jobs.number }}</span></li>
+
+            {% if jobs.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ jobs.next_page_number }}">下一页</a></li>
+                <li class="page-item"><a class="page-link" href="?page={{ jobs.paginator.num_pages }}">最后一页
+                    &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
 </div>
+<!-- 分页按钮 -->
 
 </body>
-<footer class="footer">
-    <div class="copyright">
-        <p>Copyright &copy; 20大数据应用开发3班 209030460张滔</p>
-    </div>
-</footer>
+{#<footer class="footer">#}
+{#    <div class="copyright">#}
+{#        <p>Copyright &copy; 20大数据应用开发3班 209030460张滔</p>#}
+{#    </div>#}
+{#</footer>#}
 
 <!-- JavaScript 代码 -->
 <script>
