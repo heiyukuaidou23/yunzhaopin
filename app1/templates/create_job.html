@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Job</title>
+    <title>发布职位</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         /* 自定义样式 */
@@ -33,21 +33,32 @@
             margin-top: 30px;
         }
 
+        button[type="submit"] {
+            display: block;
+            width: 10%;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
         /* 样式表继续添加根据需要进行美化 */
     </style>
     <div class="container">
-    <button class="btn btn-success" onclick="goBack()">返回</button>
-    <h1>发布职位</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">发布</button>
-    </form>
-</div>
-</body>
-<script>
-    function goBack() {
-        window.history.back();
-    }
-</script>
+        <button class="btn btn-success" onclick="goBack()">返回</button>
+        <h1>发布职位</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">发布</button>
+        </form>
+    </div>
+    </body>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </html>

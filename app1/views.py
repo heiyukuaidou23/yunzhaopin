@@ -307,7 +307,7 @@ def eview_applications(request):
         return render(request, 'eview_applications.html', {'applications': applications})
     else:
         # 处理用户未登录的情况
-        return redirect('login')
+        return redirect('elogin')
 
 
 # 查看投递的简历
