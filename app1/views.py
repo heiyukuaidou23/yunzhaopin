@@ -1,19 +1,15 @@
 from django.contrib.auth import login, logout
 from django.core.exceptions import ObjectDoesNotExist
-# from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models.expressions import Random
-from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from django.db.models import F, Value
-# from django.db.models.functions import Random
 from . import models
 from .forms import RegistrationForm, LoginForm, ERegistrationForm, ELoginForm, JobFilterForm, ResumeForm, ApplyJobForm, \
     JobForm
 from .models import Job, Resume, Application, JobSeeker
 
 
-# from .models import Farmer, FamilyMember, IncomeExpense, AssetLiability, BusinessInfo, LoanCredit
 
 
 # 注册
@@ -162,7 +158,6 @@ def profile(request):
                 resumes = Resume.objects.get(user=user)
                 return render(request, 'profile.html', {'resumes': resumes})
             except ObjectDoesNotExist:
-                # 如果没有简历，重定向到创建简历的页面
                 return redirect('w_resume')
         except models.JobSeeker.DoesNotExist:
             return render(request, 'profile.html', {'user_not_found': True})
@@ -182,7 +177,7 @@ def w_resume(request):
             resume = form.save(commit=False)
             resume.user = user
             resume.save()
-            return redirect('profile')  # 重定向到个人中心页面或其他适当的页面
+            return redirect('profile')
     else:
         form = ResumeForm()
 
@@ -212,25 +207,22 @@ def apply_job(request, job_id):
         if user_info is not None:
             user_id = user_info['id']
             user = get_object_or_404(JobSeeker, id=user_id)
-            default_resume = user.resume  # 假设你在 JobSeeker 模型中有一个名为 resume 的 OneToOneField
+            default_resume = user.resume
         else:
-            return redirect('login')  # 如果用户未登录，重定向到登录页面
+            return redirect('login')
 
         # 获取职位
         job = get_object_or_404(Job, pk=job_id)
         employer = job.employer
-
-        # 创建申请表单并验证
         form = ApplyJobForm(request.POST)
         if form.is_valid():
             # 创建申请记录并分配默认简历
             application = Application(user=user, job=job, resume=default_resume,employer=employer)
             application.save()
-            return redirect('home')  # 重定向到个人中心页面或其他适当的页面
+            return redirect('home')
     else:
-        # 处理GET请求，显示职位详情页面
         job = get_object_or_404(Job, pk=job_id)
-        form = ApplyJobForm()  # 创建申请表单实例
+        form = ApplyJobForm()
 
     return render(request, 'job_detail.html', {'job': job, 'form': form})
 
@@ -253,7 +245,7 @@ def e_profile(request):
             # 检查是否有关联的简历
             try:
                 jobs = Job.objects.filter(employer_id=user)
-                paginator = Paginator(jobs, 10)  # 每页显示5个职位
+                paginator = Paginator(jobs, 10)
                 page_number = request.GET.get('page')  # 获取当前页数，默认为第1页
                 jobs = paginator.get_page(page_number)  # 获取当前页的职位数据
                 return render(request, 'eprofile.html', {'jobs': jobs})
@@ -276,7 +268,7 @@ def create_job(request):
             job = form.save(commit=False)
             job.employer = user  # 将职位与当前登录的招聘者关联
             job.save()
-            return redirect('ehome')  # 重定向到招聘者个人中心或其他适当的页面
+            return redirect('ehome')
 
     else:
         form = JobForm()
@@ -292,7 +284,7 @@ def edit_job(request, job_id):
         form = JobForm(request.POST, instance=job)
         if form.is_valid():
             form.save()
-            return redirect('eprofile')  # 重定向到招聘者个人中心或其他适当的页面
+            return redirect('eprofile')
     else:
         form = JobForm(instance=job)
 
